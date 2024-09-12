@@ -101,6 +101,34 @@ FROM Production.Product
 WHERE NOT (Color = "Silver" AND ListPrice < 700);
 ```
 
+### Home Activities Practice 2  
+  
+```SQL
+-- Write a query that displays the Order number (SalesOrderID), Order date, 
+-- Customer Number (CustomerID) and Order amount (SubTotal) from
+-- the Sales.SalesOrderHeader table, for the orders above $1500 and 
+-- an Order date from Jan. 1,2013 onwards.
+SELECT SalesOrderId AS "Order Number", OrderDate, CustomerId, SubTotal from Sales.SalesOrderHeader
+WHERE SubTotal > 1500 AND OrderDate >= '2013-01-01';
+```
+
+```SQL
+-- Write a query that displays all the data from the Person.Person table, 
+-- only for people whose BusinessEntityID is above 10,000 and their 
+-- first name is either Jack or Crystal.
+
+SELECT BusinessEntityID, FirstName FROM Person.Person 
+WHERE BusinessEntityID > 10000 
+AND (FirstName = 'Jack' OR FirstName = 'Crystal');
+```
+
+```sql
+-- Write a query that displays the SalesOrderID, ProductID, and total amount 
+-- for that order line (LineTotal) 
+-- only for items with a Line Total between 100 and 1.000, inclusive.
+SELECT SalesOrderID, ProductID, LineTotal AS "Total Amount" FROM Sales.SalesOrderDetail
+WHERE LineTotal >= 100 AND LineTotal <= 1000;
+```
 
 
 
