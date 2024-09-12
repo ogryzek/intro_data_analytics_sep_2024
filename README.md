@@ -154,9 +154,30 @@ WHERE CustomerID = 15148;
 -- SELECT SalesOrderID, OrderDate, ShipDate, DueDate, TotalDue FROM Sales.SalesOrderHeader WHERE CustomerID = 15148;
 ```
 
+3. Write a query that returns all the orders in the Sales.SalesOrderHeader table that were issued on 31/07/2013 (OrderDate).
+```sql
+SELECT * FROM Sales.SalesOrderHeader WHERE OrderDate = '2013-07-31';
+```
+4. Write a query that returns all the product details from the Production.Product table for all the products with the Color Black.
+```sql
+SELECT * FROM Production.Product WHERE Color = 'Black';
+```
 
+5. Display the product details for the products from the Production.Product table with a List Price of 1079.99 or lower. Display the following columns: ProductID, Color, ListPrice.
 
+```sql
+SELECT ProductID, Color, ListPrice FROM Production.Product
+WHERE ListPrice <= 1079.99;
+```
 
-
+6. Display the product details for the products from the Production. Producttable with a List Price above 3000.
+Display the following columns: ProductID, Color, ListPrice.
+How many such products are there?
+```sql
+SELECT ProductID, Color, ListPrice
+-- How many such products are there? 
+-- SELECT COUNT(*) 
+FROM Production.Product WHERE ListPrice > 3000;
+```
 
 
