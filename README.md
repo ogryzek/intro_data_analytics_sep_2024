@@ -130,7 +130,29 @@ SELECT SalesOrderID, ProductID, LineTotal AS "Total Amount" FROM Sales.SalesOrde
 WHERE LineTotal >= 100 AND LineTotal <= 1000;
 ```
 
+## SQL Practice Booklet Part 2  
+  
+1. Write a query that returns the Firstname, Middlename and Lastname of the people with the Middle name J in the `Person.Person` table.  
+  
+```sql
+SELECT FirstName, MiddleName, LastName
+FROM Person.Person
+WHERE MiddleName = 'J';
+```
 
+2. How many orders were made by customer no.15148(CustomerID)? Find it in the Sales.SalesOrderHeader table.
+Instruction: Write a query that returns the order details for customer 15148.
+
+```SQL
+-- The instructions and the question seem to be asking for somewhat different
+-- things. Any of these following answers seem reasonable.  
+
+SELECT COUNT(*) AS "The Answer" FROM Sales.SalesOrderHeader
+WHERE CustomerID = 15148;
+
+-- SELECT * FROM Sales.SalesOrderHeader WHERE CustomerID = 15148;
+-- SELECT SalesOrderID, OrderDate, ShipDate, DueDate, TotalDue FROM Sales.SalesOrderHeader WHERE CustomerID = 15148;
+```
 
 
 
