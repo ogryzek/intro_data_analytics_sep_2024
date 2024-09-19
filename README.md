@@ -16,3 +16,8 @@ In Class Exercises:
 
 2. Write a query similar to the example given for `ProductID, Color` in the Aggregate Functions slide, such that you can explain what the query result will be.  
   
+```sql
+SELECT SUM(Subtotal) AS 'Total Income for 2012' 
+FROM Sales.SalesOrderHeader 
+WHERE Year(OrderDate) = 2012;
+```

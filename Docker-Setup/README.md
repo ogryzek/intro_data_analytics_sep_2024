@@ -29,10 +29,22 @@ docker exec -it SQLEdge mkdir "/var/opt/mssql/backup"
 docker cp ~/Desktop/AdventureWorks2022.bak SQLEdge:/var/opt/mssql/backup/
 ```
 
-
 ## Using Azure Data Studio
 
-Then restore
+Create a new connection:
+
+![Data Connection](connection.png)
+
+Note the information in the `docker run` command above. Namely, the port mapping and the password, so that we can enter the correct information into the connection. Feel free to customize them for yourself.
+
+
+```
+Server: localhost,6666  
+Username: sa
+Password: w0nD3rFuuull
+```
+
+Then through Azure Data Studio, you can either use the GUI Restore feature, or run the following (note: If you are using a different AdventureWorks backup, you will need to modify this).
 ```
 RESTORE DATABASE AdventureWorks2022 FROM DISK = '/var/opt/mssql/backup/AdventureWorks2022.bak' WITH REPLACE, RECOVERY, MOVE 'AdventureWorks2022' TO '/var/opt/mssql/data/aw2022.mdf', MOVE 'AdventureWorks2022_log'  TO '/var/opt/mssql/data/aw2022.ldf';
 
