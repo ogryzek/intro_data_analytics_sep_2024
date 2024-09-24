@@ -7,7 +7,16 @@
 - [Week 1](/Week1)  
   
 ## Week 2  
+
+- [An Introduction to Data Analysis - Lesson 4: Grouping and Aggregation]
+- [An Introduction to Data Analysis - Lesson 5: Advancing FilteringPage]
+ - [An Introduction to Data Analysis - Lesson 6: Diagram and Join TablesPage]
+ - [An Introduction to Data Analysis - Lesson 7: Union and ConditionsPage]  
+   
+### Grouping and Aggregation - Lesson 4  
   
+
+
 In Class Exercises:  
   
 1. Find a table of records with some fields containing null values.
@@ -21,3 +30,4 @@ SELECT SUM(Subtotal) AS 'Total Income for 2012'
 FROM Sales.SalesOrderHeader 
 WHERE Year(OrderDate) = 2012;
 ```
+
