@@ -243,7 +243,10 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
 13. Continuing from the previous question, can the First and Last Names be added, as well? If so, link the table and add the relevant columns to the query results.  
   
 14. Write a query that displays the customer code and the highest order amount (SubTotal) in 2012 and 2013 for each customer from the Sales SalesOrderHeader table, Display only the orders with values in both the salesman column and the PurchaseOrderNumber column. Check the names of the appropriate columns in the table.  
-  
+
+## 7. Union & Conditions  
+### Part 1–Union, Union All
+
 1. Writeaquerythatreturnsasinglelistofallcustomernumbersfromthe Sales.Customer table and sales people from the Sales.SalesPerson table. Check the names of the appropriate columns in the table.
 2. WriteaquerythatdisplaystheProductIDfortheproductsthatmeetatleastoneof the following requirements. If the item meets more than one requirement, the product code should be displayed only once. Solve with union only:  
   a. The product was ordered (Sales.SalesOrderDetail) at a unit price after discount (calculated using the existing columns) greater than 1800, and the CarrierTrackingNumber starts with the letters 4E.
@@ -257,6 +260,7 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
 
   ![reference image](reference.png)
   
+
 ### Part 2–Case When
 
 1. WriteaquerybasedonthePerson.Persontable,thatdisplaysthefollowingdata:
@@ -299,7 +303,8 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
    
   Following is a preview of the results:
 
-![results preview 02](results_preview_02.png)
-## 7. Union & Conditions  
-### Part 1–Union, Union All
+![results preview 02](results_preview_02.png)  
+  
+
+
 
