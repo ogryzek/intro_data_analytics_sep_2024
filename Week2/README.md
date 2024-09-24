@@ -14,6 +14,7 @@
     a. Was there a rise or drop in sales?
     b. Thinkwhatthecausesforthismaybe(basedonyourgeneralknowledgeand life experience).  
 
+
 4. Writeaquerythatdisplaystheamountofordersmadebyeachcustomer (CustomerID). Use the Sales.SalesOrderHeader table. Instruction: Write a query that groups the data in the Sales.SalesOrderHeader table according to Customer ID and displays the Customer ID and a count of the number of orders. Give a significant name to the column with the number of orders per customer.  
 
 5. Continuingfromthepreviousquestion,sortthequeryresultsaccordingtothe number of orders from the highest to the lowest.  
@@ -247,29 +248,43 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
 ## 7. Union & Conditions  
 ### Part 1–Union, Union All
 
-1. Writeaquerythatreturnsasinglelistofallcustomernumbersfromthe Sales.Customer table and sales people from the Sales.SalesPerson table. Check the names of the appropriate columns in the table.
-2. WriteaquerythatdisplaystheProductIDfortheproductsthatmeetatleastoneof the following requirements. If the item meets more than one requirement, the product code should be displayed only once. Solve with union only:  
+1. Write a query that returns a single list of all customer numbers from the `Sales.Customer` table and sales people from the `Sales.SalesPerson` table. Check the names of the appropriate columns in the table.  
+```sql
+--ANSWER GOES HERE
+```
+
+2. Write a query that displays the `ProductID` for the products that meet at least one of the following requirements. If the item meets more than one requirement, the product code should be displayed only once. Solve with **union only**:  
   a. The product was ordered (Sales.SalesOrderDetail) at a unit price after discount (calculated using the existing columns) greater than 1800, and the CarrierTrackingNumber starts with the letters 4E.
-  b. Theorderrecordisforaquantityofproductgreaterthan10unitsandthe tracking number ends with the number 4.
-3. Inthefollowingquery,wewanttocomparethequantityofproductsofeachcolor in the product table to the quantity of items of each color ordered, in order to understand which colors are ordered most by customers.  
+  b. The order record is for a quantity of product greater than 10 units and the tracking number ends with the number 4.  
+```sql
+--ANSWER GOES HERE
+```
+
+3. In the following query,we want to compare the quantity of products of each color in the product table to the quantity of items of each color ordered, in order to understand which colors are ordered most by customers.  
   a. The query will return 3 columns: Color, number of items (a calculated column named NoOfItems), and the data source (a calculated column named SourceOfData).
-  b. Thequerywillreturnasinglerowforeachcolorfromtheproducttable.The row will contain the color, the number of products of that color and the constant text 'P', to show that the data came from the product table.
+  b. The query will return a single row for each color from the product table. The row will contain the color, the number of products of that color and the constant text 'P', to show that the data came from the product table.
   c. In addition, the query will return one row for each color from the Sales.SalesOrderDetail table. The row will contain the color, the number of products of that color ordered and the constant text 'O', to show that the data came from the orders table.
-  d. Sorttheresultsaccordingtocolorcode.
-  e. Followingisascreenshotofthebeginningofthequeryresults for reference:  
-
+  d. Sort the results according to color code.
+  e. Following is a screenshot of the beginning of the query results for reference:  
   ![reference image](reference.png)
-  
 
+```sql
+-- ANSWER GOES HERE
+```
+  
 ### Part 2–Case When
 
-1. WriteaquerybasedonthePerson.Persontable,thatdisplaysthefollowingdata:
+1. Write aquery based on the `Person.Persontable`,that displays the following data:
   • First name
   • Last name
   • A column named TitleEdited that will contain the following data:
   If there is a value in the Title column, it will display it, and if there is no value, it will display "No Title".
 
-2. WriteaquerybasedontheProduction.Producttable,thatdisplaysthefollowing data:
+```sql
+--ANSWER GOES HERE
+```
+
+2. Write a query based on the `Production.Product` table, that displays the following data:
   • ProductID
   • Name
   • A column named StyleEdited that will contain the information to whom the model is suited, according to the value in the Style column and the following key:
@@ -278,7 +293,25 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
     c. U → Unisex
     d. No value→Accessories
 
-4. Challengequestion(Continuationfromthepreviousquestion) The previous query produced a list of all the order records with the rank of each record according to the quantity of items ordered. Now, we want to refine the display to see how many times each group code appears. To do this, write a query that shows how many times each group code (A, B, C, D –according to the data in the previous question) appears in the Sales.SalesOrderDetail table. Instruction: Look at the results of the previous query, and think how the answer could be calculated manually.  
+```sql
+--ANSWER GOES HERE
+```
+
+3. Write a query that ranks each row in the `Sales.SalesOrderDetail` table, and displays the following data: SalesOrderID, OrderQty, Group Code (details below). The Group code will be based on the value that appears in the Order Quantity column, and the following key:
+  a. uptooneitem=D
+  b. 2-5items(inclusive)=C
+  c. 6-30 items (inclusive) = B
+  d. morethan30=A
+
+```sql
+--ANSWER GOES HERE
+```
+
+4. Challenge question (Continuation from the previous question) The previous query produced a list of all the order records with the rank of each record according to the quantity of items ordered. Now, we want to refine the display to see how many times each group code appears. To do this, write a query that shows how many times each group code (A, B, C, D –according to the data in the previous question) appears in the Sales.SalesOrderDetail table. Instruction: Look at the results of the previous query, and think how the answer could be calculated manually.  
+
+```sql
+--ANSWER GOES HERE
+```
   
 5. Inordertosegmentemployeesaccordingtogenderandmaritalstatus,writea query based on the HumanResources.Employee table that shows the number of employees in each segment of gender and family status. To make the results clearer, use the following key to change the displayed data:
   a. Gender column:
@@ -292,19 +325,24 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
     Note: Currently the values in this column are only 'S' or 'M', but since there are other family statuses (e.g., widowed, divorced, etc.), the query shoud support the other options and classify them as 'other'.
 
   c. Following is a preview of the results:  
-  ![results preview](results_preview_o1.png)
+  ![results preview](./results_preview_01.png)
 
-6. WriteaquerythatdisplaystheSubTotalofeveryorderfromtheOrderHeader table according to the following rules:
+```sql
+--ANSWER GOES HERE
+```
+6. Write a query that displays the SubTotal of every order from the OrderHeader table according to the following rules:
     a. All orders under 1000 → Low
     b. Allordersof1000ormore,butlessthan3000→Good c. All other orders → Excellent
-7. Challenge question: Continuing from the previous question, now display how many orders of each price type there are.  
-  
-  Instruction: Before you start solving it, think about the way you would solve it if you were doing it manually.  
-   
-  Following is a preview of the results:
+
+```sql
+--ANSWER GOES HERE
+```    
+
+7. Challenge question: Continuing from the previous question, now display how many orders of each price type there are. Instruction: Before you start solving it, think about the way you would solve it if you were doing it manually. Following is a preview of the results:
 
 ![results preview 02](results_preview_02.png)  
+
+```sql
+--ANSWER GOES HERE
+```
   
-
-
-
