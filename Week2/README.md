@@ -158,8 +158,148 @@ select s.StudentNo, c.CourseNo
 from StudentDetails s
 inner join StudentCourses c
 on s.StudentNo = c.StudentNo
+```  
+
+  b. LEFT JOIN:  
+
+```sql
+select s.StudenNo, c.CourseNo
+from StudentDetails s
+left join StudentCourses c
+on s.StudentNo = c.StudentNo
+```  
+  
+  c. RIGHT JOIN:  
+
+```sql
+select s.StudentNo, c.CourseNo
+from StudentDetails s
+full outer join StudentCourses c
+on s.StudentNo = c.StudentNo
+```
+4. What is the significance of the results of the following query?
+
+```sql
+select COUNT(*) as WhatIsMyMeaning
+from StudentCoursescr s
+join StudentDetails dtl
+on crs.StudentNo = dtl.StudentNo
+Where dtl.Gender = 'F'
 ```
 
+### Part 3– Join, Left Join, Right Join, Full Outer Join  
+General Instructions:
+Use the diagram, as you were taught, or the reference pages, 1-SQL-0-AdventureWorks ERD Tables Reference
+1. WriteaquerythatlinkstheSales.SalesOrderHeadertabletothe Sales.SalesOrderDetail table and displays all the columns from both tables.
+2. WriteaquerythatlinkstheSales.SalesOrderDetailtabletotheProduction.Product table and displays the following columns: SalesOrderID, ProductID, Name, ProductNumber, and LineTotal.
+Think which table should be used to display the ProductID column.
+3. Inthisquerywewillexaminetheprofitabilityofeachorderrecord:
+Write a query that links the Sales.SalesOrderDetail table to the Production.Product table and displays the following columns: SalesOrderID, ProductID, LineTotal, StandardCost, OrderQty, and the profit per order record (calculated column).
+4. WriteaquerythatlinkstheSales.SalesOrderHeadertabletothe Sales.SalesOrderDetail table and displays the following columns: SalesOrderID, OrderDate, ProductID, and LineTotal.
+Display only the details of the orders from 2012.
+5. WriteaquerythatlinkstheSales.SalesOrderDetailtabletotheProduction.Product table.
+a. Display the following columns: SalesOrderID, ProductID, and Name. Display only the details of the products for which the color is "Null".
+b. MusttheColorfieldbeselectedintheSelectsectionInordertofilterthe data according to color?
+c. If the columns are not displayed, how can the correctness of the results be verified?
+6. WriteaquerythatlinksbetweentheSales.SalesOrderDetailtable,the Production.Product table and the Sales.SalesOrderHeader table and displays the following columns: SalesOrderID, OrderDate, ProductID, Color and LineTotal.
+7. Writeaquerythatdisplaysthequantityofproductsorderedeachyear.
+Instructions: Write a query that links the Sales.SalesOrderDetail table to the Sales.SalesOrderHeader table and groups the data according to year (in a column calculated from the OrderDate field). The query will display the following columns: Year and OrderQty.
+8. WriteaquerythatdisplaystheProductIDandLineTotalonlyforordersfrom2011 in which the total paid (LineTotal) is greater than 1,000. (Calculate the date from the OrderDate column.)
+9. Writeaquerythatdisplaysthecustomerdetailsofeachorderinthe Sales.SalesOrderHeader table, The following columns should be displayed: SalesOrderID, Order Date, CustomerID, First Name, Last Name, and SubTotal.
+Sort the data by last name and then by first name.
+Instruction: Check in ERD which are the relevant tables and what are the relationships between the tables.
+  
+10. Read the following query and explain what it does: (Don't run it in SSMS.)
 
+```sql
+select p.ProductID, p.ProductSubcategoryID, c.[Name]
+From Production.Product
+left join Production.ProductSubcategory c
+on p.ProductSubcategoryID = c.ProductSubcategoryID
+```  
+
+11. Read the following queries: (Don't run them.)  
+  a. What will the following query return? Will there be one record or more in the results?  
+
+    ```sql
+    select prd.ProductID
+    from Production.product prd
+    where prd.ProductID = 921
+    ```
+  b. Lookatthefollowingquery Notethatthisqueryisbasedonthequeryfrom the previous section, but with an extra link to the Sales.SalesOrderDetail table. What will the query return? Will one record or more appear in the query results? Why?
+
+  ```sql
+  select prd.ProductID,
+  prd.[Name],
+  sod.SalesOrderID
+  from Production.product prd
+  join Sales.SalesOrderDetail so
+  on sod.ProductID = prd.ProductID
+  where prd.ProductID = 921
+  ```
+
+12. In order to send marketing mailings to customers, write a query that displays the following data for each BusinessEntityID from the Person.BusinessEntityAddress table, by linking to the Person.Address table: BusinessEntityID, AddressLine1, AddressLine2, City, StateProvinceID.
+
+13. Continuing from the previous question, can the First and Last Names be added, as well? If so, link the table and add the relevant columns to the query results.  
+  
+14. Write a query that displays the customer code and the highest order amount (SubTotal) in 2012 and 2013 for each customer from the Sales SalesOrderHeader table, Display only the orders with values in both the salesman column and the PurchaseOrderNumber column. Check the names of the appropriate columns in the table.  
+  
+1. Writeaquerythatreturnsasinglelistofallcustomernumbersfromthe Sales.Customer table and sales people from the Sales.SalesPerson table. Check the names of the appropriate columns in the table.
+2. WriteaquerythatdisplaystheProductIDfortheproductsthatmeetatleastoneof the following requirements. If the item meets more than one requirement, the product code should be displayed only once. Solve with union only:  
+  a. The product was ordered (Sales.SalesOrderDetail) at a unit price after discount (calculated using the existing columns) greater than 1800, and the CarrierTrackingNumber starts with the letters 4E.
+  b. Theorderrecordisforaquantityofproductgreaterthan10unitsandthe tracking number ends with the number 4.
+3. Inthefollowingquery,wewanttocomparethequantityofproductsofeachcolor in the product table to the quantity of items of each color ordered, in order to understand which colors are ordered most by customers.  
+  a. The query will return 3 columns: Color, number of items (a calculated column named NoOfItems), and the data source (a calculated column named SourceOfData).
+  b. Thequerywillreturnasinglerowforeachcolorfromtheproducttable.The row will contain the color, the number of products of that color and the constant text 'P', to show that the data came from the product table.
+  c. In addition, the query will return one row for each color from the Sales.SalesOrderDetail table. The row will contain the color, the number of products of that color ordered and the constant text 'O', to show that the data came from the orders table.
+  d. Sorttheresultsaccordingtocolorcode.
+  e. Followingisascreenshotofthebeginningofthequeryresults for reference:  
+
+  ![reference image](reference.png)
+  
+### Part 2–Case When
+
+1. WriteaquerybasedonthePerson.Persontable,thatdisplaysthefollowingdata:
+  • First name
+  • Last name
+  • A column named TitleEdited that will contain the following data:
+  If there is a value in the Title column, it will display it, and if there is no value, it will display "No Title".
+
+2. WriteaquerybasedontheProduction.Producttable,thatdisplaysthefollowing data:
+  • ProductID
+  • Name
+  • A column named StyleEdited that will contain the information to whom the model is suited, according to the value in the Style column and the following key:
+    a. M →Man
+    b. W→Woman 
+    c. U → Unisex
+    d. No value→Accessories
+
+4. Challengequestion(Continuationfromthepreviousquestion) The previous query produced a list of all the order records with the rank of each record according to the quantity of items ordered. Now, we want to refine the display to see how many times each group code appears. To do this, write a query that shows how many times each group code (A, B, C, D –according to the data in the previous question) appears in the Sales.SalesOrderDetail table. Instruction: Look at the results of the previous query, and think how the answer could be calculated manually.  
+  
+5. Inordertosegmentemployeesaccordingtogenderandmaritalstatus,writea query based on the HumanResources.Employee table that shows the number of employees in each segment of gender and family status. To make the results clearer, use the following key to change the displayed data:
+  a. Gender column:
+    • F→Female 
+    • M→Male
+  b. MaritalStatuscolumn:
+    • S→Single
+    • M→Married
+    • Any other value→Other
+
+    Note: Currently the values in this column are only 'S' or 'M', but since there are other family statuses (e.g., widowed, divorced, etc.), the query shoud support the other options and classify them as 'other'.
+
+  c. Following is a preview of the results:  
+  ![results preview](results_preview_o1.png)
+
+6. WriteaquerythatdisplaystheSubTotalofeveryorderfromtheOrderHeader table according to the following rules:
+    a. All orders under 1000 → Low
+    b. Allordersof1000ormore,butlessthan3000→Good c. All other orders → Excellent
+7. Challenge question: Continuing from the previous question, now display how many orders of each price type there are.  
+  
+  Instruction: Before you start solving it, think about the way you would solve it if you were doing it manually.  
+   
+  Following is a preview of the results:
+
+![results preview 02](results_preview_02.png)
 ## 7. Union & Conditions  
+### Part 1–Union, Union All
 
