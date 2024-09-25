@@ -32,10 +32,35 @@ where
 ```
   
 3. How many letters are there in the longest `FirstName` in the `Person.Persontable`?  
+
+```sql
+select 
+    max(len(FirstName)) as LongestFirstNameLength
+from 
+    Person.Person;
+```
   
 4. In order to analyze the orders,write a query that displays the following data for each order in the `Sales.SalesOrderHeader` table: `SalesOrderID`, `OrderDate`, the year of the order, the month and the day of the week.  
+
+```sql
+select
+  SalesOrderID, 
+  OrderDate,
+  datename(weekday, OrderDate) as OrderWeekDay,
+  month(OrderDate) as OrderMonth,
+  year(OrderDate) as OrderYear
+from
+  Sales.SalesOrderHeader;
+```
   
 5. Which day of the week has the highest number of orders? In order to check the distribution of orders over the days of the week, write a query that shows how many orders were generated on each day of the week. Sort the results in descending order. Instruction: Take the data from the `Sales.SalesOrderHeader` table. Use the function and operations that were taught in the lesson.  
+
+```sql
+SELECT COUNT(*) AS NoOrders, DATENAME(WEEKDAY,OrderDate) AS 'WeekDay'
+FROM Sales.SalesOrderHeader
+GROUP BY DATENAME(WEEKDAY,OrderDate)
+ORDER BY NoOrders DESC;
+```
   
 6. Which day of the week has the highest order amount? Write a query that displays the total order amount for each day of the week Instruction: Take the data from the `Sales.SalesOrderHeader` table. Use the function and operations that were taught in the lesson.  
 
