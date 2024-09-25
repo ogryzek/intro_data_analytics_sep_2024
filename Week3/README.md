@@ -35,7 +35,19 @@
   
   Preview of the results:
 
-![results set](./unit8-screen02.png)  
+![results set 2](./unit8-screen02.png)  
+
+10. To be able to send marketing mailings to customers and employees, display thefull name from the `Person.Person` table and the PhoneNumber listed in the `Person.PersonPhone` table. Note that the full name consists of: `FirstName`, `MiddleName`, `LastName`, and should appear in one column that connects the three columns. Define the full name column in the two ways that were taught. Examine the results and determine which way is the correct solution.  
+  
+  Preview of the results:
+
+![results set 3](./unit8-screen03.png) 
+  
+11. Starting from the `HumanResources.Employee` table, link the `Person.Person` table to it, and display the following columns for each employee: Full name of the employee (in the preferred method from the previous question, concat function), date of the employee's birthday (BirthDate) and employee's age today. (Today = the day the query is run.) Preview of the results: (The dates that appear are correct for the query run on 05/09/2021, in dd/mm/yyyy format.)  
+  
+![results set 4](./unit8-screen04.png)  
+  
+
 
 ## 9. Unrelated Nested Queries    
 ## 10. Related Nested Queries  
