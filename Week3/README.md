@@ -9,7 +9,27 @@
   
 1. What is the maximum `OrderQty` that was ordered in one order record in the `Sales.SalesOrderDetail` table?  
 
+```sql
+SELECT 
+    MAX(OrderQty) AS MaxOrderQty
+FROM 
+	Sales.SalesOrderDetail;
+```
+
 2. How many different products (ProductID) were ordered in 2012? Base your answer on the `Sales.SalesOrderDetail` and `Sales.SalesOrderHeader` tables.  
+
+```sql
+select
+	count(distinct t1.ProductID) as TotalProducts
+from
+	Sales.SalesOrderDetail as t1
+join
+	Sales.SalesOrderHeader as t2
+on
+	t1.SalesOrderID = t2.SalesOrderID
+where
+	year(t2.OrderDate) = 2012;
+```
   
 3. How many letters are there in the longest `FirstName` in the `Person.Persontable`?  
   
