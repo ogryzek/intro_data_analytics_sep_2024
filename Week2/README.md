@@ -298,16 +298,16 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
 ```
 
 3. Write a query that ranks each row in the `Sales.SalesOrderDetail` table, and displays the following data: SalesOrderID, OrderQty, Group Code (details below). The Group code will be based on the value that appears in the Order Quantity column, and the following key:
-  a. uptooneitem=D
-  b. 2-5items(inclusive)=C
+  a. up to one item = D
+  b. 2-5 items (inclusive) = C
   c. 6-30 items (inclusive) = B
-  d. morethan30=A
+  d. more than 30 = A
 
 ```sql
 --ANSWER GOES HERE
 ```
 
-4. Challenge question (Continuation from the previous question) The previous query produced a list of all the order records with the rank of each record according to the quantity of items ordered. Now, we want to refine the display to see how many times each group code appears. To do this, write a query that shows how many times each group code (A, B, C, D –according to the data in the previous question) appears in the Sales.SalesOrderDetail table. Instruction: Look at the results of the previous query, and think how the answer could be calculated manually.  
+4. Challenge question (Continuation from the previous question) The previous query produced a list of all the order records with the rank of each record according to the quantity of items ordered. Now, we want to refine the display to see how many times each group code appears. To do this, write a query that shows how many times each group code (A, B, C, D – according to the data in the previous question) appears in the `Sales.SalesOrderDetail` table. Instruction: Look at the results of the previous query, and think how the answer could be calculated manually.  
 
 ```sql
 --ANSWER GOES HERE
