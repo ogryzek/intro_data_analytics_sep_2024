@@ -47,6 +47,42 @@
   
 ![results set 4](./unit8-screen04.png)  
   
+### Part 2–Window Functions  
+  
+1. Introductory Question: Display the last names and first names of all the people who have the last name Adams and a first name that starts with the letter J. Sort the data by last name + first name. Base your answer on the person.person table. 
+  
+  A preview of the results:
+
+![unit 8 part 2 results 01](./unit08-part2-screen01.png)  
+  
+2. Continuing from the previous question,add a column called `NameRank` in which you rank the results so that for each last name there is an internal ranking according to the alphabetical order of the first names.  
+  
+  A preview of the results:
+
+![unit 8 part 2 results 02](./unit08-part2-screen02.png)   
+  
+3. Continuing on copy the query and add another column called `NameDenseRank` in which you rank the results with the `DENSE_RANK` function, so that for each last name, there is an internal ranking according to the alphabetical order of the first name. Examine the differences in the results between `RANK` and `DENSE_RANK`. 
+  
+  A preview of the results:  
+  
+![unit 8 part 2 results 03](./unit08-part2-screen03.png)    
+
+4. Display the orders generated on the dates `01/01/2013-02/01/2013`, based on the Order heading table. Rate each day's orders from the order with the highest SubTotal amount (rating 1) to the lowest. If there are orders with identical amounts, they receive the same rating, and then the rating continues from the next number.
+
+  A preview of the results: 
+  
+![unit 8 part 2 results 04](./unit08-part2-screen04.png)   
+  
+5. Write a query that displays a line for each month of the year (i.e.,a line for each of the months: January 2011, February 2011 ... January 2012, February 2012...), and rank the months of each year separately according to the total sales (SubTotal) in that month. (2011 has its own ranking, and the ranking starts again for 2012.) Sort the query results by year, and ranking.  
+  
+  A preview of the results:
+
+![unit 8 part 2 results 05](./unit08-part2-screen05.png)
+
+
+6. Continuing from the previous question,copy the query code,replace the ranking function with the `percent_rank()` function and run the query. (This function does not turn pink, which is fine.) Replace the sorting within the ranking to ascending. What is the significance of the ranking? A preview of the results:  
+
+![unit 8 part 2 results 06](./unit08-part2-screen06.png)
 
 
 ## 9. Unrelated Nested Queries    
