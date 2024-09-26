@@ -196,6 +196,47 @@ ORDER BY NoOrders DESC;
 ```sql
 ```  
   
+### Part 2 – Unrelated Nested Queries: A subquery that returns a table (several columns)  
+
+1. Preparationforthenextquestion: Write a query based on the data from the order details table that displays the product code, total quantity ordered, and total amount to be paid (LineTotal) for each product code.  
+  
+```sql
+```
+
+2. Continuing from the previous question, write a query based on the order details and products tables, that displays the following data for each product code: product code, Name, ProductNumber, color, total quantity ordered, LineTotal.Instructions: Write a query that returns the product details from the product table. Also, use the query you wrote in the previous question as a sub-query that returns a table, and link between the two tables using JOIN. Remember, when using a sub-query as a table, the sub-query must be named.  
+
+```sql
+``` 
+  
+3. In this question you must examine the numerical data and their relationship with the order header and order details tables. Question: Does the `SubTotal` column in the order header table contain the sum of all the rows in the `LineTotal` column of the `OrderDetails` table for that same order? Instructions: Write a query, based on the `OrderHeader` and `OrderDetails` tables, that displays the following columns: `OrderNumber`, `SubTotal` from the `OrderHeader` table, total of the `LineTotals` from the `OrderDetails` table. A preview of the results:
+
+![](./unit09-part2-screen01.png)  
+
+```sql
+```
+  
+4. Continuing from the previous question,it is difficult to tell from the results whether there are lines with differences between the sums. So we will refine the query: In the query, add a column called Diff, which shows the difference between the total payment from the Order details table and the total payment from the Order header table.  
+  
+5. Continuing from the previous question, examine the results of the previous query. Note that there are many order lines that do not have any differences, which is great. Add an instruction to the query to display only the lines with a difference (Diff). A preview of the results:  
+
+![](./unit09-part2-screen02.png)  
+```sql
+```
+  
+6. Continuing from the previous question, examine the results. What is the range of differences? That is, what is the lowest difference and what is the highest difference? To answer this question, simply sort the results of the previous query according to the value in the Diff column.  
+```sql
+```  
+  
+  
+7. Explanation of the previous questions: As analysts, we research the data. Sometimes we know in advance exactly what we want to check, but in most cases we realize that we can improve the query by adding columns with relevant information, grouping data and schema, adding or changing sorting, etc. only after we get the query results. SQL is a tool aimed at helping us, the analysts, get the information in the most convenient format for analyzing the data. Therefore, when researching topics, be sure to examine the results of your analysis and see if it would be better for you to get the data in a different format. If so, just modify the query accordingly.  
+```sql
+```  
+
+  
+8. Write a query that shows the `ProductID`, `Name`, `ListPrice`, `ProductSubcategoryID` and the difference between the list price and the average list price of all the products in the same sub-category for each product in the Production.Product table. Sort it by subcategory, in ascending order. Include in the calculation of the average list price only products with a `ListPrice` and with `ProductSubcategoryID` that is not `NULL`  
+  
+```sql
+```  
 
 ## 10. Related Nested Queries  
 ## 11. Common Table Expressions
