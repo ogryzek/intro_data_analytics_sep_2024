@@ -75,14 +75,10 @@ order by SalesAmount desc
 7. Continuing from the two previousquestions is there a correlation between the number of orders each day of the week and the profitability on that day? If there are differences in the results of the query, what can cause this difference?  
   
 ```sql
---The three most profitable days are also the days when the most orders were generated.
-Subsequently, the order differs between the two queries.
-This result can be due to the amount of orders.
-There may have been a lot of orders on a given day, but each of the orders was for a relatively low amount. 
-On the other hand, there may be one day a week with fewer orders, 
-but the amounts of all the orders are relatively high, which causes a discrepancy.
+-- The three most profitable days are also the days when the most orders were generated.
+-- Subsequently, the order differs between the two queries. This result can be due to the amount of orders. There may have been a lot of orders on a given day, but each of the orders was for a relatively low amount. 
+-- On the other hand, there may be one day a week with fewer orders, but the amounts of all the orders are relatively high, which causes a discrepancy.
 ```
-
   
 8. Write a query,based on the product and order detail stables,that displays the product type (a calculated field – will be defined later), the number of items ordered and the LineTotal for each type of product.Product type definition: ProductType is a calculated field, designated by the two left characters in the ProductNumber column. For example:
   
@@ -91,6 +87,16 @@ but the amounts of all the orders are relatively high, which causes a discrepanc
 | 1 | AR | AR-5381 |  
 | 2 | BA | BA-8327 |  
 | 3 | BB | BB-7421 |  
+  
+```sql
+select	LEFT (p.ProductNumber, 2) ProductType,
+		SUM (d.OrderQty) TotalQty, 
+		SUM (d.LineTotal) TotalAmount
+from Production.Product p
+	join Sales.SalesOrderDetail d
+		on p.ProductID = d.ProductID
+group by LEFT (p.ProductNumber, 2)
+```
 
 9. Continuing from the previous question,in order to understand each product type, link the data to the `Production.Product` Subcategory table. Start out from the previous query and add the Name column from the Subcategories table. 
   
@@ -100,15 +106,46 @@ but the amounts of all the orders are relatively high, which causes a discrepanc
 
 ![results set 2](./unit08-screen02.png)  
 
+```sql
+select	LEFT (p.ProductNumber, 2) ProductType,
+		s.[Name],
+		SUM (d.OrderQty) TotalQty, 
+		SUM (d.LineTotal) TotalAmount
+from Production.Product p
+	join Sales.SalesOrderDetail d
+		on p.ProductID = d.ProductID
+	join Production.ProductSubcategory s
+		on p.ProductSubcategoryID = s.ProductSubcategoryID
+group by LEFT (p.ProductNumber, 2), s.[Name]
+```
+
 10. To be able to send marketing mailings to customers and employees, display thefull name from the `Person.Person` table and the PhoneNumber listed in the `Person.PersonPhone` table. Note that the full name consists of: `FirstName`, `MiddleName`, `LastName`, and should appear in one column that connects the three columns. Define the full name column in the two ways that were taught. Examine the results and determine which way is the correct solution.  
   
   Preview of the results:
 
 ![results set 3](./unit08-screen03.png) 
+
+```sql
+select	CONCAT (pp.FirstName,' ', pp.MiddleName, ' ', pp.LastName) as FullNameConcat,
+		pp.FirstName + ' ' + pp.MiddleName + ' ' + pp.LastName as 'FullName+',
+		ph.PhoneNumber
+from Person.Person pp
+	left join Person.PersonPhone ph
+		on pp.BusinessEntityID = ph.BusinessEntityID
+```
   
 11. Starting from the `HumanResources.Employee` table, link the `Person.Person` table to it, and display the following columns for each employee: Full name of the employee (in the preferred method from the previous question, concat function), date of the employee's birthday (BirthDate) and employee's age today. (Today = the day the query is run.) Preview of the results: (The dates that appear are correct for the query run on 05/09/2021, in dd/mm/yyyy format.)  
   
 ![results set 4](./unit08-screen04.png)  
+
+```sql
+select	CONCAT (p.FirstName,' ', p.MiddleName, ' ', p.LastName) as FullName,
+		BirthDate,
+		DATEDIFF(YYYY, e.BirthDate, GETDATE()) as Age
+from HumanResources.Employee e
+	left join Person.Person p
+		on e.BusinessEntityID = p.BusinessEntityID
+```
   
 ### Part 2–Window Functions  
   
@@ -117,18 +154,49 @@ but the amounts of all the orders are relatively high, which causes a discrepanc
   A preview of the results:
 
 ![unit 8 part 2 results 01](./unit08-part2-screen01.png)  
+
+```sql
+select	LastName,
+		FirstName 
+from person.person
+where lastName ='Adams' and FirstName like 'j%'
+order by LastName, FirstName
+
+```
   
 2. Continuing from the previous question,add a column called `NameRank` in which you rank the results so that for each last name there is an internal ranking according to the alphabetical order of the first names.  
   
   A preview of the results:
 
 ![unit 8 part 2 results 02](./unit08-part2-screen02.png)   
+
+```sql
+select	LastName, 
+		FirstName, 
+		rank () over (	partition by lastname 
+						order by firstname) as NameRank
+from person.person
+where lastName ='Adams' and FirstName like 'j%'
+order by LastName, FirstName
+```
   
 3. Continuing on copy the query and add another column called `NameDenseRank` in which you rank the results with the `DENSE_RANK` function, so that for each last name, there is an internal ranking according to the alphabetical order of the first name. Examine the differences in the results between `RANK` and `DENSE_RANK`. 
   
   A preview of the results:  
   
 ![unit 8 part 2 results 03](./unit08-part2-screen03.png)    
+  
+```sql
+select	LastName, 
+		FirstName, 
+		rank () over ( partition by lastname 
+	 			 order by firstname) as NameRank,
+		dense_rank () over ( partition by lastname 
+					order by firstname) as NameDenseRank
+from person.person
+where lastName ='Adams' and FirstName like 'j%'
+order by LastName, FirstName
+```
 
 4. Display the orders generated on the dates `01/01/2013-02/01/2013`, based on the Order heading table. Rate each day's orders from the order with the highest SubTotal amount (rating 1) to the lowest. If there are orders with identical amounts, they receive the same rating, and then the rating continues from the next number.
 
@@ -136,17 +204,49 @@ but the amounts of all the orders are relatively high, which causes a discrepanc
   
 ![unit 8 part 2 results 04](./unit08-part2-screen04.png)   
   
+```sql
+select	LastName, 
+		FirstName, 
+		rank () over ( partition by lastname 
+	 			 order by firstname) as NameRank,
+		dense_rank () over ( partition by lastname 
+					order by firstname) as NameDenseRank
+from person.person
+where lastName ='Adams' and FirstName like 'j%'
+order by LastName, FirstName
+```
+  
 5. Write a query that displays a line for each month of the year (i.e.,a line for each of the months: January 2011, February 2011 ... January 2012, February 2012...), and rank the months of each year separately according to the total sales (SubTotal) in that month. (2011 has its own ranking, and the ranking starts again for 2012.) Sort the query results by year, and ranking.  
   
   A preview of the results:
 
-![unit 8 part 2 results 05](./unit08-part2-screen05.png)
-
+![unit 8 part 2 results 05](./unit08-part2-screen05.png)  
+  
+```sql
+select	year (OrderDate) as 'Year',
+		month(OrderDate)as 'Month',
+		sum (SubTotal) as MonthlyTotalAmount,
+		rank() over (	partition by year (OrderDate)
+						order by sum (SubTotal) desc) as MonthRank
+from sales.SalesOrderHeader
+group by year (OrderDate), month(OrderDate)
+order by year (OrderDate), MonthRank
+```
 
 6. Continuing from the previous question,copy the query code,replace the ranking function with the `percent_rank()` function and run the query. (This function does not turn pink, which is fine.) Replace the sorting within the ranking to ascending. What is the significance of the ranking? A preview of the results:  
 
 ![unit 8 part 2 results 06](./unit08-part2-screen06.png)
 
+```sql
+select	year (OrderDate) as 'Year',
+		month(OrderDate)as 'Month',
+		format (sum (TotalDue), '#,###') as MonthlyTotalAmount,
+		percent_rank() over (	partition by year (OrderDate)
+								order by sum (TotalDue) ) as MonthPercentRank
+from sales.SalesOrderHeader
+group by year (OrderDate), month(OrderDate)
+order by year (OrderDate), MonthPercentRank
+```
 
 ## 9. Unrelated Nested Queries 
 
