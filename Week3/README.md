@@ -130,7 +130,73 @@ ORDER BY NoOrders DESC;
 ![unit 8 part 2 results 06](./unit08-part2-screen06.png)
 
 
-## 9. Unrelated Nested Queries    
+## 9. Unrelated Nested Queries 
+
+1. Write a query that displays the `ProductID`,the `ListPrice`,and the `averagelistprice` of all the items in the product table.  
+  
+```sql
+```
+
+2. Continuing from the previous question,name the column with the average list price "AverageListPrice". In addition, make sure that the average price list price is calculated only with the items with a list price greater than 0, so as not to skew the result.  
+```sql
+```
+  
+3. Write a query that displays the `ProductID` and the `ItemColor` from the `Production.Product` table for the items with the color identical to that of item number 741.  
+```sql
+```
+  
+4. Write a query that displays the `BusinessEntityID` and `Gender` of all the employees in the employee table whose gender is the same as the gender of the employee with code 38.  
+```sql
+```
+  
+5. Continuing from the previous question, add the first and last names of the employees from the Persons table. Use the diagram or ERD to check which column links the tables.  
+```sql
+```
+  
+6. Write a query that displays the orders from the `Sales.SalesOrderHeader` table that have a `SubTotal` lower than the average of the SubTotals of all the orders. Display only the order number.  
+```sql
+```
+  
+7. Continuing from the previous question, display how many orders meet the condition.  
+```sql
+```
+  
+8. Write a query that displays, the product code, price per item after discount (calculated column), and the difference between the `LineTotal` of each order record and the average of the LineTotals (a calculated column, named DiffFromAVG) for all the records in the order details table.  
+```sql
+```
+
+9. Continuing from the previous question, write a query that displays the product codes and names of all the products in the products table that were ordered at least once in 2013.  
+```sql
+```
+  
+10. Continuing from the previous question, write a query that displays the product codes and names of all the products in the product table where the total quantity ordered in 2013 was at least 300 units.  
+```sql
+```
+  
+11. In this query, you must check the quantity and value of orders in 2013, of the ten products with the highest quantity of orders in 2012.In other words, check how the ten products that were ordered the most in 2012 functioned in 2013. (Were they ordered many times? Not ordered at all? Are they still profitable?) Instructions: Write a query that shows the order number, product code, product name, quantity of items in the order, and LineTotal per order record of the products ordered in 2013. The query results should show the data for only the ten best-selling products in 2012. Think which tables and columns are involved in the query. Use the ERD for assistance.  
+```sql
+```  
+
+12. Challenge Question: Continuing from the previous question, write a query that displays the following data for each of the ten most ordered products in 2012: product code, product name, total quantity of items ordered in 2013 and total order amount in 2013. Think which tables and columns are involved in the query. Use the ERD for assistance.  
+```sql
+```
+    
+13. Challenge Question: Continuing from the previous question, write a query showing the total quantity of items ordered and total order amount for 2012 and 2013 of the ten most ordered products in 2012. what can be deduced from the results of the query? (query result attached)  
+
+![screenshot 01 Unit 9 part 1](./unit09-part1-screen01.png)  
+  
+```sql
+```
+
+14. Challenge Question: An order for a single item is an order that has only one order line. Write a query that displays the SalesOrderID and ProductID of single item orders. Decide which table you should use.  
+```sql
+```
+  
+15. Write a query that displays all the products from the products table that were never ordered.  
+```sql
+```  
+  
+
 ## 10. Related Nested Queries  
 ## 11. Common Table Expressions
   
