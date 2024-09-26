@@ -257,10 +257,23 @@ order by year (OrderDate), MonthPercentRank
 
 2. Continuing from the previous question,name the column with the average list price "AverageListPrice". In addition, make sure that the average price list price is calculated only with the items with a list price greater than 0, so as not to skew the result.  
 ```sql
+SELECT ProductID, ListPrice, (
+        SELECT AVG(ListPrice)
+        FROM Production.Product
+        WHERE ListPrice > 0
+    ) as AvgListPrice
+FROM Production.Product
 ```
   
 3. Write a query that displays the `ProductID` and the `ItemColor` from the `Production.Product` table for the items with the color identical to that of item number 741.  
 ```sql
+select	ProductID, Color
+from Production.Product
+where color = (	
+    select	Color
+    from Production.Product
+    where ProductID = 741
+)
 ```
   
 4. Write a query that displays the `BusinessEntityID` and `Gender` of all the employees in the employee table whose gender is the same as the gender of the employee with code 38.  
@@ -269,10 +282,28 @@ order by year (OrderDate), MonthPercentRank
   
 5. Continuing from the previous question, add the first and last names of the employees from the Persons table. Use the diagram or ERD to check which column links the tables.  
 ```sql
+select	e.BusinessEntityID,e.Gender,
+		p.LastName, p.FirstName
+from HumanResources.Employee e
+left join Person.Person p
+on e.BusinessEntityID = p.BusinessEntityID
+where Gender = (	
+    select Gender
+    from HumanResources.Employee
+    where BusinessEntityID = 38
+)
 ```
   
 6. Write a query that displays the orders from the `Sales.SalesOrderHeader` table that have a `SubTotal` lower than the average of the SubTotals of all the orders. Display only the order number.  
 ```sql
+select	BusinessEntityID,
+		Gender
+from HumanResources.Employee
+where Gender = (
+    select Gender
+	from HumanResources.Employee
+	where BusinessEntityID = 38
+)
 ```
   
 7. Continuing from the previous question, display how many orders meet the condition.  
