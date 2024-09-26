@@ -64,7 +64,25 @@ ORDER BY NoOrders DESC;
   
 6. Which day of the week has the highest order amount? Write a query that displays the total order amount for each day of the week Instruction: Take the data from the `Sales.SalesOrderHeader` table. Use the function and operations that were taught in the lesson.  
 
+```sql
+select	DATENAME (weekday, OrderDate) as SaleDayOfWeek, 
+        SUM (SubTotal) SalesAmount
+from Sales.SalesOrderHeader
+group by (DATENAME (weekday, OrderDate))
+order by SalesAmount desc
+```
+
 7. Continuing from the two previousquestions is there a correlation between the number of orders each day of the week and the profitability on that day? If there are differences in the results of the query, what can cause this difference?  
+  
+```sql
+--The three most profitable days are also the days when the most orders were generated.
+Subsequently, the order differs between the two queries.
+This result can be due to the amount of orders.
+There may have been a lot of orders on a given day, but each of the orders was for a relatively low amount. 
+On the other hand, there may be one day a week with fewer orders, 
+but the amounts of all the orders are relatively high, which causes a discrepancy.
+```
+
   
 8. Write a query,based on the product and order detail stables,that displays the product type (a calculated field – will be defined later), the number of items ordered and the LineTotal for each type of product.Product type definition: ProductType is a calculated field, designated by the two left characters in the ProductNumber column. For example:
   
@@ -239,5 +257,45 @@ ORDER BY NoOrders DESC;
 ```  
 
 ## 10. Related Nested Queries  
+
+1. Write a query that displays all the names of the products in the products table that were ordered at least once (`Sales.SalesOrderDetai`l) Solve this twice: once by using In, and a second time by using Exists.  
+
+2. Write a query that displays the `Name` of the product from the `Production.Product` table that has the word "Wheels" in its sub-category name in the `Production.Product` Subcategory table. Solve this using `Exists`  
+  
+3. Write a query that displays the data of all the people from the `Person.Person` table who ordered a product in 2013. Instruction: Consider which tables must be used in the query. (Hint: 3 tables.) Note that each row with person details should appear only once – no more. Solve this using Exists.  
+
+4. What does the following query return?  
+
+```sql
+select pe.BusinessEntityID, pe.LastName,
+              pe.FirstName
+   from Person.Person pe
+        join Sales.Customer sc
+              on pe.BusinessEntityID = sc.PersonID
+Part 1 – Related Nested Queries, Exists
+where exists(
+)
+select *
+from Sales.SalesOrderHeader sh
+     join Sales.SalesOrderDetail sd
+           on sh.SalesOrderID = sd.SalesOrderID
+     join Production.Product pr
+           on sd.ProductID = pr.ProductID
+where pr.ProductSubcategoryID in (1, 2, 3) and pr.StandardCost > 600
+and sh.CustomerID = sc.CustomerID
+```
+
+5. Write a query that displays all the columns from the `Sales.SalesPerson` table but displays only the sales people who have sold at least one product with the word "frame" in its model name. Instruction:
+  a. Which tables are required for this query? (Hint: 4 tables.)
+  b. Consider which tables link the `Sales.SalesPerson` table to the `Production.ProductModel` table, with the knowledge that each item from the `Production.Product` table has its own `ProductModelID`.
+  c. Write the outer query, i.e., what is returned as the result of the query.
+  d. Add `Exists` to the filter, and write the sub-query with the connections between the tables (Join).
+  e. Connect the sub-query to the query that contains it.  
+
+6. Write a query that displays the first name,last name,Job Title and the number of employees in that department from the `HumanResources.Employee` table. Use the `HumanResources.Employee` and `Person.Person` tables. Note: This may be solved in several ways. One way includes a link between the internal and outer query, without using Exists. Another solution uses Unrelated Nested Queries. A preview of the results:
+
+![screenshot 1, part-1, unit 10](./unit10-part1-screen01.png)  
+  
+
 ## 11. Common Table Expressions
   
