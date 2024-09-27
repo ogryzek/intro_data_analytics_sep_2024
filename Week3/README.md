@@ -613,10 +613,46 @@ order by p.ProductSubcategoryID
 ## 10. Related Nested Queries  
 
 1. Write a query that displays all the names of the products in the products table that were ordered at least once (`Sales.SalesOrderDetai`l) Solve this twice: once by using In, and a second time by using Exists.  
+```sql
+--A: Using In
+select	ProductID, [Name]
+from Production.Product
+where ProductID in (select ProductID from Sales.SalesOrderDetail)
 
-2. Write a query that displays the `Name` of the product from the `Production.Product` table that has the word "Wheels" in its sub-category name in the `Production.Product` Subcategory table. Solve this using `Exists`  
+--B: Using Exist
+select ProductID, [Name]
+from Production.Product p
+where exists (
+	select ProductID 
+	from Sales.SalesOrderDetail d
+	where p.ProductID = d.ProductID
+)
+```
+
+2. Write a query that displays the `Name` of the product from the `Production.Product` table that has the word "Wheels" in its sub-category name in the `Production.Product` Subcategory table. Solve this using `Exists`.   
+  
+```sql
+select	p.[Name]
+from Production.Product p
+where exists (
+	select * from Production.ProductSubcategory sb 
+	where sb.ProductSubcategoryID = p.ProductSubcategoryID
+	and sb.[Name] ='Wheels'
+)
+```
   
 3. Write a query that displays the data of all the people from the `Person.Person` table who ordered a product in 2013. Instruction: Consider which tables must be used in the query. (Hint: 3 tables.) Note that each row with person details should appear only once – no more. Solve this using Exists.  
+
+```sql
+select * from Person.Person p 
+where exists (
+	select * from Sales.SalesOrderHeader h
+	join Sales.Customer c
+	on c.CustomerID = h.CustomerID
+	where	p.BusinessEntityID = c.PersonID 
+	and YEAR (OrderDate) = 2013
+)
+```
 
 4. What does the following query return?  
 
@@ -645,11 +681,42 @@ and sh.CustomerID = sc.CustomerID
   c. Write the outer query, i.e., what is returned as the result of the query.
   d. Add `Exists` to the filter, and write the sub-query with the connections between the tables (Join).
   e. Connect the sub-query to the query that contains it.  
-
+```sql
+select *
+from Sales.SalesPerson s
+where exists (
+	select * from Sales.SalesOrderHeader h
+	join Sales.SalesOrderDetail d on h.SalesOrderID = d.SalesOrderID
+	join Production.Product p on d.ProductID = p.ProductID
+	join Production.ProductModel m on p.ProductModelID = m.ProductModelID
+	where m.[Name] like '%frame%' and s.BusinessEntityID = h.SalesPersonID
+)
+```
 6. Write a query that displays the first name,last name,Job Title and the number of employees in that department from the `HumanResources.Employee` table. Use the `HumanResources.Employee` and `Person.Person` tables. Note: This may be solved in several ways. One way includes a link between the internal and outer query, without using Exists. Another solution uses Unrelated Nested Queries. A preview of the results:
 
 ![screenshot 1, part-1, unit 10](./unit10-part1-screen01.png)  
   
+```sql
+--option A
+select p.LastName, p.FirstName, e.JobTitle, (
+	select count (*) from HumanResources.Employee 
+	where JobTitle = e.JobTitle
+) as AmountInDepartment
+from HumanResources.Employee e
+left join Person.Person p on p.BusinessEntityID = e.BusinessEntityID
+
+--option B
+select  p.LastName, p.FirstName, e.JobTitle, dc.AmountInDepartment
+from HumanResources.Employee e 
+left join Person.Person p on p.BusinessEntityID = e.BusinessEntityID
+join (	
+	select JobTitle, count (*) as AmountInDepartment
+	from HumanResources.Employee
+	group by JobTitle 
+) dc
+
+on dc.JobTitle = e.JobTitle
+```
 
 ## 11. Common Table Expressions
   
