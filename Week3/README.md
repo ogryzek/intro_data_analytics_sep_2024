@@ -253,14 +253,21 @@ order by year (OrderDate), MonthPercentRank
 1. Write a query that displays the `ProductID`,the `ListPrice`,and the `averagelistprice` of all the items in the product table.  
   
 ```sql
+select	ProductID, ListPrice,
+	(
+	select avg (ListPrice)
+	from Production.Product
+	)
+from Production.Product
 ```
 
 2. Continuing from the previous question,name the column with the average list price "AverageListPrice". In addition, make sure that the average price list price is calculated only with the items with a list price greater than 0, so as not to skew the result.  
 ```sql
-SELECT ProductID, ListPrice, (
-        SELECT AVG(ListPrice)
-        FROM Production.Product
-        WHERE ListPrice > 0
+SELECT ProductID, ListPrice, 
+	(
+	SELECT AVG(ListPrice)
+	FROM Production.Product
+	WHERE ListPrice > 0
     ) as AvgListPrice
 FROM Production.Product
 ```
@@ -278,6 +285,13 @@ where color = (
   
 4. Write a query that displays the `BusinessEntityID` and `Gender` of all the employees in the employee table whose gender is the same as the gender of the employee with code 38.  
 ```sql
+select BusinessEntityID, Gender
+from HumanResources.Employee
+where Gender = (
+	select Gender
+	from HumanResources.Employee
+	where BusinessEntityID = 38
+)
 ```
   
 5. Continuing from the previous question, add the first and last names of the employees from the Persons table. Use the diagram or ERD to check which column links the tables.  
@@ -308,26 +322,95 @@ where Gender = (
   
 7. Continuing from the previous question, display how many orders meet the condition.  
 ```sql
+select count (*) as CountOrdersAboveAvg
+from sales.SalesOrderHeader
+where TotalDue < (
+	select avg (TotalDue)
+	from Sales.SalesOrderHeader
+)
 ```
   
 8. Write a query that displays, the product code, price per item after discount (calculated column), and the difference between the `LineTotal` of each order record and the average of the LineTotals (a calculated column, named DiffFromAVG) for all the records in the order details table.  
 ```sql
+select SalesOrderID,ProductID,
+	LineTotal / OrderQty as UnitPriceAfterDiscount,
+	LineTotal - (
+		select AVG (LineTotal)
+		from Sales.SalesOrderDetail
+	) as DiffFromAVG
+from Sales.SalesOrderDetail
 ```
 
 9. Continuing from the previous question, write a query that displays the product codes and names of all the products in the products table that were ordered at least once in 2013.  
 ```sql
+select	ProductID, [Name]
+from Production.Product
+where ProductID in (
+	select d.ProductID 
+	from Sales.SalesOrderDetail d
+	join Sales.SalesOrderHeader h
+	on d.SalesOrderID = h.SalesOrderID
+	where YEAR(h.OrderDate) = 2013
+)
 ```
   
 10. Continuing from the previous question, write a query that displays the product codes and names of all the products in the product table where the total quantity ordered in 2013 was at least 300 units.  
 ```sql
+select	ProductID, [Name]
+from Production.Product
+where ProductID in (
+	select d.ProductID 	
+	from Sales.SalesOrderDetail d
+	join Sales.SalesOrderHeader h
+	on d.SalesOrderID = h.SalesOrderID
+	where YEAR(h.OrderDate) = 2013
+	group by ProductID
+	having SUM(d.OrderQty) > 300
+)
 ```
   
 11. In this query, you must check the quantity and value of orders in 2013, of the ten products with the highest quantity of orders in 2012.In other words, check how the ten products that were ordered the most in 2012 functioned in 2013. (Were they ordered many times? Not ordered at all? Are they still profitable?) Instructions: Write a query that shows the order number, product code, product name, quantity of items in the order, and LineTotal per order record of the products ordered in 2013. The query results should show the data for only the ten best-selling products in 2012. Think which tables and columns are involved in the query. Use the ERD for assistance.  
 ```sql
+select	d.ProductID, d.ProductID, p.[Name],
+		d.OrderQty, d.LineTotal
+from Sales.SalesOrderDetail d
+	join Production.Product p
+	on d.ProductID = p.ProductID
+	join Sales.SalesOrderHeader h
+	on d.SalesOrderID = h.SalesOrderID
+where YEAR(h.OrderDate) = 2013 
+and d.ProductID in (
+	select TOP 10 d.ProductID
+	from Sales.SalesOrderDetail d
+	join Sales.SalesOrderHeader h
+	on d.SalesOrderID = h.SalesOrderID
+	where YEAR(h.OrderDate) = 2012
+	group by d.ProductID
+	order by SUM(d.OrderQty) desc
+)
 ```  
 
 12. Challenge Question: Continuing from the previous question, write a query that displays the following data for each of the ten most ordered products in 2012: product code, product name, total quantity of items ordered in 2013 and total order amount in 2013. Think which tables and columns are involved in the query. Use the ERD for assistance.  
 ```sql
+select	d.ProductID, p.[Name],
+		SUM (d.OrderQty) as TotalQty,
+		SUM (d.LineTotal) as TotalAmount
+from Sales.SalesOrderDetail d
+	join Production.Product p
+	on d.ProductID = p.ProductID
+	join Sales.SalesOrderHeader h
+	on d.SalesOrderID = h.SalesOrderID
+where YEAR(h.OrderDate) = 2013 
+and d.ProductID in (
+	select TOP 10 d.ProductID
+	from Sales.SalesOrderDetail d
+		join Sales.SalesOrderHeader h
+		on d.SalesOrderID = h.SalesOrderID
+	where YEAR(h.OrderDate) = 2012
+	group by d.ProductID
+	order by SUM(d.OrderQty) desc
+)
+group by d.ProductID, p.[Name]
 ```
     
 13. Challenge Question: Continuing from the previous question, write a query showing the total quantity of items ordered and total order amount for 2012 and 2013 of the ten most ordered products in 2012. what can be deduced from the results of the query? (query result attached)  
@@ -335,26 +418,105 @@ where Gender = (
 ![screenshot 01 Unit 9 part 1](./unit09-part1-screen01.png)  
   
 ```sql
+select	d.ProductID,
+	p.[Name],
+	SUM (case when YEAR(h.OrderDate) = 2012 then d.OrderQty end) as TotalQty2012,
+	SUM (case when YEAR(h.OrderDate) = 2013 then d.OrderQty end) as TotalQty2013,
+	SUM (case when YEAR(h.OrderDate) = 2012 then d.LineTotal end) as TotalAmount2012,
+	SUM (case when YEAR(h.OrderDate) = 2013 then d.LineTotal end) as TotalAmount2013
+from Sales.SalesOrderDetail d
+	join Production.Product p
+	on d.ProductID = p.ProductID
+	join Sales.SalesOrderHeader h
+	on d.SalesOrderID = h.SalesOrderID
+where d.ProductID in (
+	select TOP 10 d.ProductID
+	from Sales.SalesOrderDetail d
+		join Sales.SalesOrderHeader h
+		on d.SalesOrderID = h.SalesOrderID
+	where YEAR(h.OrderDate) = 2012
+	group by d.ProductID
+	order by SUM(d.OrderQty) desc
+)
+group by d.ProductID, p.[Name]
+order by TotalAmount2012 desc
+
+/* Answer:
+From the results of the query, it can be concluded that some of the most ordered products in 2012 (6 products) decreased in their quantities and order amounts in the orders of 2013, but there are several items (4 products) for which we saw a significant increase in the quantities and amounts sold.
+
+This raises a number of interesting points, for example:
+	a.	Is this a business that is influenced by trends and fashion, 
+		such that a product that is the most ordered in one year might not 
+		be ordered at all in the following year?
+
+	b.	Could it be that items that could have been ordered and profitable 
+		were not ordered at all the following year due to them being out of stock?
+*/
 ```
 
 14. Challenge Question: An order for a single item is an order that has only one order line. Write a query that displays the SalesOrderID and ProductID of single item orders. Decide which table you should use.  
 ```sql
+select sod.SalesOrderID, sod.ProductID
+from Sales.SalesOrderDetail sod
+where SalesOrderID in (
+	select SalesOrderID
+	from Sales.SalesOrderDetail
+	group by SalesOrderID
+	having count (*) = 1
+)
 ```
   
 15. Write a query that displays all the products from the products table that were never ordered.  
 ```sql
+select  ProductID, [Name]
+from Production.Product
+where ProductID not in (
+	select ProductID 
+	from Sales.SalesOrderDetail
+	where ProductID is not null 
+)
+order by ProductID
+
+-- Another potential solution
+Select distinct p.ProductID	
+from Production.Product p 
+left join Sales.SalesOrderDetail d 
+on p.ProductID = d.ProductID
+where d.ProductID is null
+order by p.ProductID
 ```  
   
 ### Part 2 – Unrelated Nested Queries: A subquery that returns a table (several columns)  
 
-1. Preparationforthenextquestion: Write a query based on the data from the order details table that displays the product code, total quantity ordered, and total amount to be paid (LineTotal) for each product code.  
+1. Preparation for the next question: Write a query based on the data from the order details table that displays the product code, total quantity ordered, and total amount to be paid (LineTotal) for each product code.  
   
 ```sql
+select	ProductID,
+	SUM(OrderQty) TotalQty,
+	SUM(LineTotal) TotalAmount
+from Sales.SalesOrderDetail
+group by ProductID
 ```
 
 2. Continuing from the previous question, write a query based on the order details and products tables, that displays the following data for each product code: product code, Name, ProductNumber, color, total quantity ordered, LineTotal.Instructions: Write a query that returns the product details from the product table. Also, use the query you wrote in the previous question as a sub-query that returns a table, and link between the two tables using JOIN. Remember, when using a sub-query as a table, the sub-query must be named.  
 
 ```sql
+select	p.ProductID,
+		p.[Name],
+		p.ProductNumber,
+		p.Color,
+		SaleSummery.TotalAmount,
+		SaleSummery.TotalQty	
+from Production.Product p
+join (
+	select	ProductID,
+			SUM(OrderQty) TotalQty,
+			SUM(LineTotal) TotalAmount
+	from Sales.SalesOrderDetail
+	group by ProductID
+) as SaleSummery
+on p.ProductID = SaleSummery.ProductID
+
 ``` 
   
 3. In this question you must examine the numerical data and their relationship with the order header and order details tables. Question: Does the `SubTotal` column in the order header table contain the sum of all the rows in the `LineTotal` column of the `OrderDetails` table for that same order? Instructions: Write a query, based on the `OrderHeader` and `OrderDetails` tables, that displays the following columns: `OrderNumber`, `SubTotal` from the `OrderHeader` table, total of the `LineTotals` from the `OrderDetails` table. A preview of the results:
@@ -362,29 +524,90 @@ where Gender = (
 ![](./unit09-part2-screen01.png)  
 
 ```sql
+select 	h.SalesOrderID, 
+		h.SubTotal, 
+		d.LinesSum
+from Sales.SalesOrderHeader h
+left join (	
+	select	SalesOrderID, 
+	SUM (LineTotal) as LinesSum
+	from sales.SalesOrderDetail
+	group by SalesOrderID 
+) d
+on d.SalesOrderID = h.SalesOrderID
 ```
   
 4. Continuing from the previous question,it is difficult to tell from the results whether there are lines with differences between the sums. So we will refine the query: In the query, add a column called Diff, which shows the difference between the total payment from the Order details table and the total payment from the Order header table.  
+```sql
+select 	h.SalesOrderID, 
+		h.SubTotal, 
+		d.LinesSum,
+		h.SubTotal - d.LinesSum as Diff
+from Sales.SalesOrderHeader h
+left join (
+	select SalesOrderID, 
+	SUM (LineTotal) as LinesSum
+	from sales.SalesOrderDetail
+	group by SalesOrderID 
+)d
+on d.SalesOrderID = h.SalesOrderID
+```
   
 5. Continuing from the previous question, examine the results of the previous query. Note that there are many order lines that do not have any differences, which is great. Add an instruction to the query to display only the lines with a difference (Diff). A preview of the results:  
 
 ![](./unit09-part2-screen02.png)  
 ```sql
+select 	h.SalesOrderID, 
+		h.SubTotal, 
+		d.LinesSum,
+		h.SubTotal - d.LinesSum as Diff
+from Sales.SalesOrderHeader h
+left join (
+	select	SalesOrderID, 
+	SUM (LineTotal) as LinesSum
+	from sales.SalesOrderDetail
+	group by SalesOrderID 
+) d
+on d.SalesOrderID = h.SalesOrderID
+where h.SubTotal - d.LinesSum <> 0
 ```
   
 6. Continuing from the previous question, examine the results. What is the range of differences? That is, what is the lowest difference and what is the highest difference? To answer this question, simply sort the results of the previous query according to the value in the Diff column.  
 ```sql
+select 	h.SalesOrderID, h.SubTotal, d.LinesSum,
+		h.SubTotal - d.LinesSum as Diff
+from Sales.SalesOrderHeader h
+left join (	select	SalesOrderID, 
+	SUM (LineTotal) as LinesSum
+	from sales.SalesOrderDetail
+	group by SalesOrderID 
+) d
+on d.SalesOrderID = h.SalesOrderID
+where h.SubTotal - d.LinesSum <> 0
+order by h.SubTotal - d.LinesSum
 ```  
-  
   
 7. Explanation of the previous questions: As analysts, we research the data. Sometimes we know in advance exactly what we want to check, but in most cases we realize that we can improve the query by adding columns with relevant information, grouping data and schema, adding or changing sorting, etc. only after we get the query results. SQL is a tool aimed at helping us, the analysts, get the information in the most convenient format for analyzing the data. Therefore, when researching topics, be sure to examine the results of your analysis and see if it would be better for you to get the data in a different format. If so, just modify the query accordingly.  
-```sql
-```  
 
   
 8. Write a query that shows the `ProductID`, `Name`, `ListPrice`, `ProductSubcategoryID` and the difference between the list price and the average list price of all the products in the same sub-category for each product in the Production.Product table. Sort it by subcategory, in ascending order. Include in the calculation of the average list price only products with a `ListPrice` and with `ProductSubcategoryID` that is not `NULL`  
   
 ```sql
+select	p.ProductID,
+		p.[name],
+		p.ListPrice,
+		p.ProductSubcategoryID,
+		p.ListPrice - ac.avgCategoryPrice as diff
+from Production.Product p
+join (
+	select	ProductSubcategoryID,
+	avg (ListPrice) avgCategoryPrice
+	from Production.Product
+	where ListPrice <> 0 and ProductSubcategoryID is not null
+	group by ProductSubcategoryID
+) ac
+on p.ProductSubcategoryID = ac.ProductSubcategoryID
+order by p.ProductSubcategoryID
 ```  
 
 ## 10. Related Nested Queries  
