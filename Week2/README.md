@@ -174,22 +174,23 @@ order by FirstName
 | Production.BillOfMaterials |  | Production.Product |  |  
 | Person.Person |  | Person.BusinessEntity |  |  
 
-2. LookatthePerson.AddressandPerson.BusinessEntityAddresstables.
+2. Look at the Person.Address and Person.BusinessEntityAddresstables.
   a. What is the connection between them? How can they be connected?
-  b. Whatisthesignificanceofthedataineachofthetables?
+  b. What is the significance of the data in each of the tables?
   
 ### Part 2–Basics: Join, Left Join, Right Join, Full Outer Join  
  
-1. Beloware2tablesfromthedatabaseoftheAnalystintheMakingCollege.  
+1. Below are 2 tables from the database of the Analyst in the Making College.  
 
 ![](./studentdetails.png)
 ![](./studentcourses.png)  
   
 
-2. Lookatthedatainthetablesandtrytounderstandthefollowing:  
+2. Look at the data in the tables and try to understand the following:  
   a. What does each table represent? What is significant about the content?
-  b. Isthereaconnectionbetweenthetables?Whatisit?
-3. Takepaperandpenandtrytoarriveatthequeryresultsmanually.Writedownthe results.  
+  b. Is there a connection between the tables? What is it?  
+
+3. Take paper and pen and try to arrive at the query results manually. Write down the results.  
     a. JOIN / INNER JOIN:
 ```sql
 select s.StudentNo, c.CourseNo
@@ -287,14 +288,26 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
 
 1. Write a query that returns a single list of all customer numbers from the `Sales.Customer` table and sales people from the `Sales.SalesPerson` table. Check the names of the appropriate columns in the table.  
 ```sql
---ANSWER GOES HERE
+select BusinessEntityID
+from Sales.SalesPerson
+union
+select CustomerID
+from Sales.Customer
 ```
 
 2. Write a query that displays the `ProductID` for the products that meet at least one of the following requirements. If the item meets more than one requirement, the product code should be displayed only once. Solve with **union only**:  
   a. The product was ordered (Sales.SalesOrderDetail) at a unit price after discount (calculated using the existing columns) greater than 1800, and the CarrierTrackingNumber starts with the letters 4E.
   b. The order record is for a quantity of product greater than 10 units and the tracking number ends with the number 4.  
 ```sql
---ANSWER GOES HERE
+select distinct ProductID
+from Sales.SalesOrderDetail 
+where	(LineTotal/OrderQty) > 1800 and 
+		CarrierTrackingNumber like '4E%'
+union 
+select distinct ProductID
+from Sales.SalesOrderDetail 
+where	OrderQty > 10 and 
+		CarrierTrackingNumber like '%4'
 ```
 
 3. In the following query,we want to compare the quantity of products of each color in the product table to the quantity of items of each color ordered, in order to understand which colors are ordered most by customers.  
@@ -306,7 +319,20 @@ on p.ProductSubcategoryID = c.ProductSubcategoryID
   ![reference image](reference.png)
 
 ```sql
--- ANSWER GOES HERE
+select	Color,
+		COUNT (*) NoOfItems,
+		'P' SourceOfData
+from Production.Product
+group by Color
+union
+select	Color,
+		SUM (d.OrderQty),
+		'O' SourceOfData
+from Sales.SalesOrderDetail d
+	join Production.Product p
+		on d.ProductID = p.ProductID
+group by Color
+order by Color
 ```
   
 ### Part 2–Case When
