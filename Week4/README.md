@@ -48,3 +48,141 @@
     g. Use the two CTEs you defined, and display the following columns for all the colors (i.e., without colorless products): color, total order quantity, total orders, and quantity of products of this color in the Products table.
  
 ## 12. Data Retieval  
+### Part 1 – All subjects learned so far General instructions:
+• The practice begins with very simple questions that gradually increase in difficulty and complexity.
+• A short description (one line) should be added before each query.
+• Refer to the document containing the ERD and read the explanations about the
+company's Purchase order tables carefully.
+• Before starting to work, examine the tables and the data within the tables, and make sure that you understand the data, their significance and the connections between the tables in the ERD.
+
+Research Question
+The purpose of this interim practice is to examine the topic of orders from vendors.
+In this practice, you will write queries that will answer the following business questions:
+• Who are the main vendors of the store?
+• Are there any vendors who supply more than one product? Which products?
+• Which vendors do not deliver a large percentage of the order?
+• Are there products supplied by more than one vendor ? Which vendors have the fastest average delivery time?
+• Etc.
+
+The analysis
+1. Write a query that displays the `BusinessEntityID`, Vendor name and Account number from the Vendor table. Examine the query results. How many records are there in the table?  
+  
+![Screen Shot](./UNIT12_Screen01.png)  
+  
+2. Write a query that displays the `BusinessEntityID`, Vendor name and Account number from the Vendor table for vendors whose names end with the word "Company".  
+  
+![Screen Shot 2 Unit 12](./UNIT12_Screen02.png)  
+  
+3. Write a query that displays the `PurchaseorderID`, `VendorID`, `Orderdate`,and total cost per order from the Purchase order header table.  
+  
+![Screen 03 Unit 12](./UNIT12_Screen03.png)  
+  
+4. Continuing from the previous section, add also thevendor's name to the table. Consider which table can provide the vendor name, and which kind of table connection should be used. (Check the different JOIN types, and whether all the vendors appear in the Vendor table.)  
+  
+![UNIT 12 Screen 04](./UNIT12_Screen04.png)  
+  
+5. Continuing from the previous question, add also the account number from the Vendors table. Display only the orders issued in 2012, and only those from vendors whose account numbers begin with the letters A-I and end with the number 2.  In order to filter by vendor name, must the "vendor name" field be chosen in select, as well?  
+  
+![Screen 05: Unit 12](./UNIT12_Screen05.png)  
+  
+6. For each vendor, display the purchase orders that we reordered from them in 2012-2013.
+  a. Display the following columns: Purchase order ID, Vendor ID, Vendor name, Order date, and total cost per order.
+  b. Sort by VendorID and date ina scending order. 
+   
+![Screen 06: Unit 12](./UNIT12_Screen06.png)
+
+7. Write a query that collects the following data from the Purchaseorderheader table for each vendor: Vendor ID, Order Amount and total cost for all orders. Sort the results by total cost per order in descending order.
+
+![Screen 07: Unit 12](./UNIT12_Screen07.png)
+
+8. Continuing from the previous question, add a column with the total amount of items stocked from each vendor. Note that the quantity of items entered into stock (StockedQty) is in the Purchasing.PurchaseOrderDetail table. Consider how best to add the required column. Hint: Sub-query or CTE  
+
+![Screen 08: Unit 12](./UNIT12_Screen08.png)
+
+9. Write a query that displays the vendor for each product. If there are two vendors for the same product, the product will appear twice in the list: once for the first vendor and a second time for the second vendor.
+
+![Screen 09: Unit 12](./UNIT12_Screen09.png)
+
+10. Continuing from the previous question, display the number of different products that each vendor supplies. Instruction: Before beginning to solve, consider how to arrive at the query results and plan the method.
+
+![Screen 10: Unit 12](./UNIT12_Screen10.png)
+
+
+11. Write a query that displays, the Purchase order ID, the ShipMethodID and the Name of the shipping method of each purchase order.    
+
+![Screen 11: Unit 12](./UNIT12_Screen11.png)
+
+
+12. Continuing from the previous question, display the total number of orders shipped by each shipping method. Display the following columns: ShipMethodID, Shipping method Name, Number of Orders shipped by this method. Sort by number of orders shipped by this method in descending order.  
+  
+![Screen 12: Unit 12](./UNIT12_Screen12.png)  
+  
+13. Continuing from the previous question, copy the query and add that only the shipping methods used for more than 500 orders will be displayed.  
+
+![Screen 13: Unit 12](./UNIT12_Screen13.png)
+
+
+  
+14. Continuing from the previous question, display only the shipping methods used for more than one quarter of the orders.  
+  
+![Screen 14: Unit 12](./UNIT12_Screen14.png)
+ 
+
+15. Write a query that displays all the order records for the year 2012, and how many items are missing in each order record.  
+  a. Display the following columns: Vendor ID, Product ID, OrderQty, Quantity of items missing out of the quantity ordered. (A calculated field. The fields required for the calculation are: Quantity ordered and Stocked Quantity.)
+  b. Sort by VendorID in ascending order.
+
+![Screen 15: Unit 12](./UNIT12_Screen15.png)
+
+
+16. Continuing from the previous question, copy the previous query, adding that only the order records in which all the ordered items were not provided will be displayed.  
+  
+![Screen 16: Unit 12](./UNIT12_Screen16.png)
+
+
+17. Continuing from the previous questions, write a query that displays the Vendor ID, the quantity of items ordered from them and the quantity items that they failed to deliver for each vendor from whom items were ordered in 2012. Sort by the number of missing items in descending order.  
+  
+![Screen 17: Unit 12](./UNIT12_Screen17.png)
+
+
+18. Continuing from the previous question, calculate the percentage of items not delivered out of all the items ordered from the vendor.
+  a. Display the following fields: Vendor ID, total quantity of items ordered, total quantity of missing items, percentage of missing items from all the items ordered (calculated column).
+  b. Hint: The formula for the percentage of missing items from the ordered items: (lack_amount) / (Total_ordered _amount) * 100.
+  c. Display only vendors who were short.
+  d. Sort the data by the missing percentage in descending order.  
+    
+![Screen 18: Unit 12](./UNIT12_Screen18.png)
+
+
+19. Write a query that shows how many items of each product (ProductID) were stocked (StockedQty). Sort by quantity stocked in descending order.  
+
+![Screen 19: Unit 12](./UNIT12_Screen19.png)
+
+
+20. Continuing from the previous question, display also the product name (from the Production.Product table.)
+
+![Screen 20: Unit 12](./UNIT12_Screen20.png)
+
+
+21. In this question, the vendors will be sorted into 4 groups according to the quantity of items purchased from them. In this way we can distinguish who are the main vendors of the store. The groups will be formed to have the same number of suppliers in each group. Write a query that displays the Vendor ID, the total cost of the products purchased from them (in all the years), and Group (Group 1 = the vendors who supplied the highest amount, Group 4 = the vendors who supplied the lowest amount). Hint: Window function - ntile
+
+![Screen 21: Unit 12](./UNIT12_Screen21.png)
+
+
+22. Continuing from the previous question, rank the vendors annually according to the amount purchased from them.
+  a. Display the following fields: Vendor ID, year, total cost of items purchased from the vendor, vendor ranking according to total cost of items in descending order (1 = the highest amount purchased in that year).  Hint: Window function - rank / dense_rank
+  b. Display a row for each vendor and year (i.e., vendor number 1 - year 2011; vendor number 1 - year 2012; etc.)
+  c. Sort by vendor ID.
+
+![Screen 22: Unit 12](./UNIT12_Screen22.png)
+
+
+23. For each purchase order from a vendor, display the following columns: Purchase order ID, Vendor ID, OrderDate, DueDate, number of days for the arrival of the shipment (calculated column: Due date - Order date) Sort by number of days for the arrival of the shipment in descending order.
+
+![Screen 23: Unit 12](./UNIT12_Screen23.png)
+
+
+24. Continuing from the previous question, display the average days for the arrival of the shipment for each vendor.  
+
+![Screen 24: Unit 12](./UNIT12_Screen24.png)  
+

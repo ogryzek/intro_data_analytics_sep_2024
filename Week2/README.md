@@ -5,23 +5,60 @@
 - [7. Union & Conditions](#7-union--conditions)  
   
 ## 4. Grouping & Aggregation  
+### Part 1 - GROUP BY Keyword
 
-1. Howmuchincome(SubTotal)wastherein2012(OrderDate)? Instruction: Write a query that answers the question, is based on the Sales SalesOrderHeader table and filters the data by year. (Use the function YEAR().)  
+1. How much income (SubTotal) was there in 2012 (OrderDate)? Instruction: Write a query that answers the question, is based on the `Sales.SalesOrderHeader` table and filters the data by year. (Use the function YEAR().)  
+```sql
+select SUM(SubTotal) as 'income'
+from Sales.SalesOrderHeader
+where year (OrderDate) = 2012
+```
 
-2. Howmuchincome(SubTotal)wastherein2013(OrderDate)? Instruction: Write a query that answers the question, based on the Sales.SalesOrderHeader table .  
-
-3. Examinetheresultsofthe2previousquestionsandanswerthefollowing:
+2. How much income (`SubTotal`) was there in 2013 (`OrderDate`)? Instruction: Write a query that answers the question, based on the `Sales.SalesOrderHeader` table.  
+```sql
+select SUM(SubTotal) as 'income'
+from Sales.SalesOrderHeader
+where year(OrderDate) = 2013
+```
+  
+3. Examine the results of the 2 previous questions and answer the following:
     a. Was there a rise or drop in sales?
-    b. Thinkwhatthecausesforthismaybe(basedonyourgeneralknowledgeand life experience).  
+    b. Think what the causes for this may be(based on your general knowledge and life experience).  
+```
+Answer:
+A. There was an increase in sales in 2013, compared to 2012.
+B. The reason could stem from better marketing, for example
+```
 
+4. Write a query that displays the amount of orders made by each customer (CustomerID). Use the `Sales.SalesOrderHeader` table. Instruction: Write a query that groups the data in the Sales.`SalesOrderHeader` table according to Customer ID and displays the Customer ID and a count of the number of orders. Give a significant name to the column with the number of orders per customer.  
+  
+```sql
+select	CustomerID,
+		COUNT (*) as NoOfOrders
+from Sales.SalesOrderHeader
+group by CustomerID
+```
+  
+5. Continuing from the previous question,sort the query results according to the number of orders from the highest to the lowest.  
+```sql
+select	CustomerID,
+		COUNT (*) as NoOfOrders
+from Sales.SalesOrderHeader
+group by CustomerID
+order by NoOfOrders desc
+```
 
-4. Writeaquerythatdisplaystheamountofordersmadebyeachcustomer (CustomerID). Use the Sales.SalesOrderHeader table. Instruction: Write a query that groups the data in the Sales.SalesOrderHeader table according to Customer ID and displays the Customer ID and a count of the number of orders. Give a significant name to the column with the number of orders per customer.  
+6. Continuing from the previous question,add code so that the query will run only on the orders with Order Date 2013.
+```sql
+select	CustomerID,
+		COUNT (*) as NoOfOrders
+from Sales.SalesOrderHeader
+where YEAR(OrderDate) = 2013
+group by CustomerID
+order by NoOfOrders desc
+```
 
-5. Continuingfromthepreviousquestion,sortthequeryresultsaccordingtothe number of orders from the highest to the lowest.  
-
-6. Continuingfromthepreviousquestion,addcodesothatthequerywillrunonly on the orders with Order Date 2013.
-
-7. WriteaquerythatdisplaysdescriptivestatisticsforeachColorfromthe Production.Product table : quantity of items of the same color, maximum list price, average list price, minimum list price, Instruction: Write a query that retrieves data from the Production.Product table, and groups it by Color field. Display the color code, and the appropriate aggregate functions. Be sure to give significant, comprehensible names to the calculated columns.  
+7. Write a query that displays descriptive statistics foreach Color from the Production.Product table : quantity of items of the same color, maximum list price, average list price, minimum list price, Instruction: Write a query that retrieves data from the Production.Product table, and groups it by Color field. Display the color code, and the appropriate aggregate functions. Be sure to give significant, comprehensible names to the calculated columns.  
 
 8. Continuingfromthepreviousquestion,examinetheresults.Notethatthereare colors for which the minimum price is 0. Since a product cannot have a price to the customer of 0, copy the query and add a filter to it, so that lines with List Price 0 will not be included in the calculation.  
 
